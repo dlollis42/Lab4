@@ -3,15 +3,15 @@
 
 #include "CircularListIterator.h"
 
-#include "Drawable.h"
-#include "Line.h"
-#include "Circle.h"
-#include "Update.h"
+// #include "Drawable.h"
+// #include "Line.h"
+// #include "Circle.h"
+// #include "Update.h"
 #include "Text.h"
 using CSC2110::String;
 
 template < class T >
-class CircularList : public Drawable
+class CircularList //: public Drawable
 {
 
    private:
@@ -19,10 +19,10 @@ class CircularList : public Drawable
       int loc_pos;
       int sze;
       DoubleNode<T>* find(int index);
-      void animateMovement(bool clockwise, DoubleNode<T>* where);
+      // void animateMovement(bool clockwise, DoubleNode<T>* where);
 
-      bool update_active;
-      Update* gui;
+      // bool update_active;
+      // Update* gui;
 
    public:
       CircularList();
@@ -37,9 +37,9 @@ class CircularList : public Drawable
       void set(int index, T* item);
       CircularListIterator<T>* iterator();
 
-      void addListener(Update* gui);
-      void draw(Cairo::RefPtr<Cairo::Context> cr, int width, int height);
-      void mouseClicked(int x, int y);
+      // void addListener(Update* gui);
+      // void draw(Cairo::RefPtr<Cairo::Context> cr, int width, int height);
+      // void mouseClicked(int x, int y);
 
 };
 
@@ -86,7 +86,7 @@ DoubleNode<T>* CircularList<T>::find(int index)
       for (int i = 1; i <= -1*min_dist; i++)
       {
          where = where->getPrev();
-         animateMovement(false, where);
+         // animateMovement(false, where);
       }
    }
    else  //positive distance means use next links, clockwise
@@ -94,42 +94,42 @@ DoubleNode<T>* CircularList<T>::find(int index)
       for (int i = 1; i <= min_dist; i++)
       {
          where = where->getNext();
-         animateMovement(true, where);
+         // animateMovement(true, where);
       }
    }
 
    return where;
 }
 
-template < class T >
-void CircularList<T>::animateMovement(bool clockwise, DoubleNode<T>* where)
-{
-   if (update_active)  //animate the movement of loc around the circular list
-   {
-      loc = where;
-      if (!clockwise)
-      {
-         //moving counterclockwise
-         loc_pos--;
-         if (loc_pos == 0) 
-         {
-            loc_pos = sze;
-         }
-      }
+// template < class T >
+// void CircularList<T>::animateMovement(bool clockwise, DoubleNode<T>* where)
+// {
+//    if (update_active)  //animate the movement of loc around the circular list
+//    {
+//       loc = where;
+//       if (!clockwise)
+//       {
+//          //moving counterclockwise
+//          loc_pos--;
+//          if (loc_pos == 0) 
+//          {
+//             loc_pos = sze;
+//          }
+//       }
 
-      else
-      {
-         //moving clockwise
-         loc_pos++;
-         if (loc_pos == sze + 1) 
-         {
-            loc_pos = 1;
-         }
-      }
+//       else
+//       {
+//          //moving clockwise
+//          loc_pos++;
+//          if (loc_pos == sze + 1) 
+//          {
+//             loc_pos = 1;
+//          }
+//       }
 
-      gui->update();
-   }
-}
+//       gui->update();
+//    }
+// }
 
 template < class T >
 void CircularList<T>::remove(int index) 
@@ -233,8 +233,8 @@ CircularList<T>::CircularList()
    sze = 0;
    removeAll();
 
-   update_active = 0;
-   gui = NULL;
+   // update_active = 0;
+   // gui = NULL;
 }
 
 template < class T >
@@ -295,122 +295,122 @@ CircularListIterator<T>* CircularList<T>::iterator()
    return new CircularListIterator<T>(find(1));
 }
 
-template < class T >
-void CircularList<T>::addListener(Update* g)
-{
-   gui = g;
-   update_active = 1;
-}
+// template < class T >
+// void CircularList<T>::addListener(Update* g)
+// {
+//    gui = g;
+//    update_active = 1;
+// }
 
-template < class T >
-void CircularList<T>::draw(Cairo::RefPtr<Cairo::Context> cr, int width, int height)
-{
-   update_active = 0;  //turn off painting inside the paint method
+// template < class T >
+// void CircularList<T>::draw(Cairo::RefPtr<Cairo::Context> cr, int width, int height)
+// {
+//    update_active = 0;  //turn off painting inside the paint method
 
-   double sze = (double) this->sze;
-   //included so that the small circles will stay entirely on the panel (they have a radius too)
-   int offset = 10;  
+//    double sze = (double) this->sze;
+//    //included so that the small circles will stay entirely on the panel (they have a radius too)
+//    int offset = 10;  
 
-   double angleIncr = 360.0/sze;  
-   //the circle will start being drawn at the top of the panel
-   double angle = -90;  
-   double r1 = (double) (width - 2*offset)/2; 
-   double r2 = (double) (height - 2*offset)/2;
-   double r;
-   //find the constraining dimension and use that for the radius
-   if (r1 < r2)  
-   {
-      r = r1;
-   }
-   else
-   {
-      r = r2;
-   }
+//    double angleIncr = 360.0/sze;  
+//    //the circle will start being drawn at the top of the panel
+//    double angle = -90;  
+//    double r1 = (double) (width - 2*offset)/2; 
+//    double r2 = (double) (height - 2*offset)/2;
+//    double r;
+//    //find the constraining dimension and use that for the radius
+//    if (r1 < r2)  
+//    {
+//       r = r1;
+//    }
+//    else
+//    {
+//       r = r2;
+//    }
 
-   //starting positions-- start at the top of the panel, in the center (y increases downward)
-   double x = r + offset;
-   double y = offset;
+//    //starting positions-- start at the top of the panel, in the center (y increases downward)
+//    double x = r + offset;
+//    double y = offset;
 
-   CircularListIterator<T>* iter = iterator();
+//    CircularListIterator<T>* iter = iterator();
 
-   T* before = NULL;
-   T* item = NULL;
-   int xd = -1, yd = -1;
-   int xbefore = -1, ybefore = -1;
+//    T* before = NULL;
+//    T* item = NULL;
+//    int xd = -1, yd = -1;
+//    int xbefore = -1, ybefore = -1;
 
-   //draw the lines
-   Line* line = new Line(new Color(0, 0, 0), 5);
-   while(iter->hasNext())
-   {
-       before = item;  //connect current node to the previously drawn node (if not the first node)
-       item = iter->next();
+//    //draw the lines
+//    Line* line = new Line(new Color(0, 0, 0), 5);
+//    while(iter->hasNext())
+//    {
+//        before = item;  //connect current node to the previously drawn node (if not the first node)
+//        item = iter->next();
          
-       xbefore = xd;
-       ybefore = yd;
-       xd = (int) x;
-       yd = (int) y;
+//        xbefore = xd;
+//        ybefore = yd;
+//        xd = (int) x;
+//        yd = (int) y;
 
-       //connect the current node to the previously drawn node
-       if (before != NULL)
-       {
-          line->draw(cr, xbefore, ybefore, xd, yd);
-       }
+//        //connect the current node to the previously drawn node
+//        if (before != NULL)
+//        {
+//           line->draw(cr, xbefore, ybefore, xd, yd);
+//        }
 
-       angle = angle + angleIncr;
+//        angle = angle + angleIncr;
 
-       //update x and y
-       x = r*cos(angle*3.1415927/180) + (r + offset);  //move x and y to the center of the circle and then compute the distance to move from there (based on r and theta)
-       y = r*sin(angle*3.1415927/180) + (r + offset);
-   }
-   delete iter;
+//        //update x and y
+//        x = r*cos(angle*3.1415927/180) + (r + offset);  //move x and y to the center of the circle and then compute the distance to move from there (based on r and theta)
+//        y = r*sin(angle*3.1415927/180) + (r + offset);
+//    }
+//    delete iter;
 
-   //connect last node to the first node
-   if (before != NULL)
-   {
-      line->draw(cr, xd, yd, (int) (r + offset), (int) offset);
-   }
-   delete line;
+//    //connect last node to the first node
+//    if (before != NULL)
+//    {
+//       line->draw(cr, xd, yd, (int) (r + offset), (int) offset);
+//    }
+//    delete line;
 
-   iter = iterator();
+//    iter = iterator();
 
-   //draw the circles
-   int radius = 20;  //the radius of the circles representing links
-   int count = 0;  //the node that loc points to (located at index loc_pos) needs to be painted blue rather than red
-   while(iter->hasNext())
-   {
-       item = iter->next();
+//    //draw the circles
+//    int radius = 20;  //the radius of the circles representing links
+//    int count = 0;  //the node that loc points to (located at index loc_pos) needs to be painted blue rather than red
+//    while(iter->hasNext())
+//    {
+//        item = iter->next();
 
-       count++;
-       CSC2110::String* text = item->getKey();  
-       Circle* circle;
-       if (count == loc_pos)
-       {
-          circle = new Circle(new Color(0, 1, 0), radius, text);
-       }
-       else
-       {
-          circle = new Circle(new Color(1, 0, 0), radius, text);
-       }
+//        count++;
+//        CSC2110::String* text = item->getKey();  
+//        Circle* circle;
+//        if (count == loc_pos)
+//        {
+//           circle = new Circle(new Color(0, 1, 0), radius, text);
+//        }
+//        else
+//        {
+//           circle = new Circle(new Color(1, 0, 0), radius, text);
+//        }
          
-       //draw the small circles
-       xd = (int) x;
-       yd = (int) y;
+//        //draw the small circles
+//        xd = (int) x;
+//        yd = (int) y;
 
-       circle->draw(cr, xd, yd);
-       delete circle;
+//        circle->draw(cr, xd, yd);
+//        delete circle;
 
-       angle = angle + angleIncr;
+//        angle = angle + angleIncr;
 
-       //update x and y
-       x = r*cos(angle*3.1415927/180) + r + offset;
-       y = r*sin(angle*3.1415927/180) + r + offset;
-   }
-   delete iter;
+//        //update x and y
+//        x = r*cos(angle*3.1415927/180) + r + offset;
+//        y = r*sin(angle*3.1415927/180) + r + offset;
+//    }
+//    delete iter;
 
-   update_active = 1;
-}
+//    update_active = 1;
+// }
 
-template < class T >
-void CircularList<T>::mouseClicked(int x, int y) {}
+// template < class T >
+// void CircularList<T>::mouseClicked(int x, int y) {}
 
 #endif
